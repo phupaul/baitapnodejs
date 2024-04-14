@@ -24,7 +24,7 @@ router.get('/register', function(req, res, next) {
     res.sendFile(indexPath);
   });
 
-  router.get('/resetpassword', function(req, res, next) {
+  router.get('/reset', function(req, res, next) {
     // Đường dẫn tới tệp HTML của trang chính
     var indexPath = path.join(__dirname, '../views/reset.html');
     res.sendFile(indexPath);

@@ -54,10 +54,11 @@
 <body>
     <div class="reset-container">
         <h2>Reset Password</h2>
-        <form action="#" method="post">
+        <form id="form-reset" method="post">
             <div class="form-group">
                 <label for="password">New Password:</label>
                 <input type="password" id="password" name="password" required>
+                <input type="hidden" id="token" name="token" value="">
                 <span class="show-password" onclick="togglePassword()">Show Password</span>
             </div>
             <div class="form-group">
@@ -65,8 +66,8 @@
             </div>
         </form>
     </div>
-
-    <script>
+    <script  type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
         function togglePassword() {
             var passwordField = document.getElementById("password");
             if (passwordField.type === "password") {
@@ -76,31 +77,35 @@
             }
         }
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#reset-button').click(function() {
-                var token = window.location.pathname.split('/').pop(); // Get token from URL
-                var password = $('#password').val();
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var url = new URLSearchParams(window.location.search);
+            var token = url.get('token')
+            $('#token').val(token);
+
+            $('#form-reset').submit(function(event){
+                event.preventDefault();
+                var formData = $(this).serialize();
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/auth/resetpassword/' + token,
-                    contentType: 'application/json',
-                    data: JSON.stringify({ password: password }),
-                    success: function(response) {
-                        if (response.success) {
-                            alert('Password reset successfully.');
-                        } else {
-                            alert(response.data);
+                    url : `http://localhost:3000/auth/resetpassword/${token}`,
+                    data : formData,
+                    success: function(response){
+                        if(response.success){
+                            alert(response.message);
+                        }else {
+                            alert(response.message);
                         }
                     },
-                    error: function(xhr, status, error) {
-                        alert('An error occurred. Please try again later.');
+                    error: function (xhr, status , error){
+                        console.log("loi khi gui yeu cau", error);
+                        alert(" đã có lỗi khi gửi yêu cầu , vui lòng thử lại");
                     }
-                });
-            });
-        });
+                })
+
+            })
+        })
     </script>
 </body>
 </html>

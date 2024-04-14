@@ -8,7 +8,13 @@ var helmet = require('helmet');
 //var cors = require('cors')
 
 var app = express();
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    scriptSrcAttr: ["'unsafe-inline'"],
+    scriptSrc: ["'unsafe-inline'", "https://code.jquery.com"]
+
+  }
+}));
 /*app.use(cors({
   origin: 'http://127.0.0.1:5500', // Thay đổi thành domain của ứng dụng của bạn
   credentials: true // Cho phép sử dụng cookies trong các yêu cầu CORS
